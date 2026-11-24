@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Brasa & Sabor — Cardápio</title>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;800&family=Rozha+One&display=swap">
+  <style>
+    :root {
+      --red: #8a1422;
+      --red2: #5a0b15;
+      --gold: #e8a317;
+      --ink: #1c1311;
+      --bg: #fbf3e3;
+      --tx: #1c1311;
+      --card: #fffaf0;
+      --mut: #6c5d54;
+      --line: #e9dcc0;
+      --hd: "Rozha One", Georgia, serif;
+      --bd: "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px)
+    }
+
+    @media(prefers-color-scheme:dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #150e0d;
+        --tx: #f7ebd3;
+        --card: #241a17;
+        --mut: #b9a998;
+        --line: #3b2d28
+      }
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #150e0d;
+      --tx: #f7ebd3;
+      --card: #241a17;
+      --mut: #b9a998;
+      --line: #3b2d28
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: inherit
+    }
+
+    html {
+      scroll-padding-top: calc(124px + env(safe-area-inset-top, 0px));
+      scroll-behavior: smooth
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--tx);
+      font: 16px/1.45 var(--bd);
+      padding-bottom: 90px
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+      border: 0;
+      color: inherit
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 2px
+    }
+
+    .wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 16px
+    }
+
+    header.top {
+      position: sticky;
+      top: env(safe-area-inset-top, 0px);
+      z-index: 20;
+      background: var(--red2);
+      color: #fbf3e3
+    }
+
+    header.top .wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      height: 56px
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font: 22px var(--hd);
+      flex: 1
+    }
+
+    .logo i {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: grid;
+      place-items: center;
+      font-style: normal;
+      font-size: 19px
+    }
+
+    .badge {
+      font-size: 13px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 99px;
+      background: #2c7a3f;
+      color: #fff
+    }
+
+    .badge.off {
+      background: #444
+    }
+
+    .hero {
+      background: radial-gradient(circle at 80% 30%, #c4261f 0, var(--red) 40%, var(--red2) 100%);
+      color: #fbf3e3;
+      padding: 28px 0 34px;
+      overflow: hidden
+    }
+
+    .hero .wrap {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 8px;
+      align-items: center
+    }
+
+    .hero h1 {
+      font: 34px/1.05 var(--hd);
+      margin: 0 0 10px
+    }
+
+    .hero p {
+      margin: 0 0 18px;
+      opacity: .92
+    }
+
+    .plate {
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle, #f6c04a 0, var(--gold) 55%, #b97a06 100%);
+      display: grid;
+      place-items: center;
+      font-size: 92px;
+      transform: rotate(-12deg);
+      box-shadow: 0 0 0 8px rgba(251, 243, 227, .18)
+    }
+
+    .cta {
+      background: var(--gold);
+      color: var(--ink);
+      font-weight: 800;
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-size: 17px;
+      width: 100%
+    }
+
+    .hero .cta {
+      width: auto;
+      grid-column: 1/-1;
+      justify-self: start
+    }
+
+    .cta:disabled {
+      opacity: .5
+    }
+
+    .info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: -18px 0 6px;
+      position: relative
+    }
+
+    .box {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 14px
+    }
+
+    .box b {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 2px
+    }
+
+    .chips {
+      position: sticky;
+      top: calc(56px + env(safe-area-inset-top, 0px));
+      z-index: 15;
+      background: var(--bg);
+      border-bottom: 1px solid var(--line)
+    }
+
+    .chips .wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 8px 16px
+    }
+
+    .chip {
+      flex: none;
+      white-space: nowrap;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 99px;
+      padding: 8px 14px;
+      font-weight: 600;
+      font-size: 15px;
+      min-height: 42px;
+      color: var(--tx)
+    }
+
+    .chip.on {
+      background: var(--red);
+      border-color: var(--red);
+      color: #fff
+    }
+
+    @media(max-width:600px) {
+      .hero .wrap {
+        grid-template-columns: 1fr;
+        gap: 18px
+      }
+
+      .hero .cta {
+        width: 100%
+      }
+
+      .plate {
+        width: 140px;
+        justify-self: center
+      }
+
+      .info {
+        grid-template-columns: 1fr
+      }
+
+      .chips {
+        position: static
+      }
+
+      .chips .wrap {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px
+      }
+
+      .chip {
+        white-space: normal;
+        text-align: center;
+        padding: 10px 8px;
+        font-size: 14px;
+        line-height: 1.2
+      }
+
+      .feat {
+        grid-template-columns: 1fr
+      }
+
+      .feat .prod {
+        flex-direction: row
+      }
+
+      .feat .thumb {
+        width: 88px;
+        height: 88px;
+        font-size: 44px
+      }
+
+      html {
+        scroll-padding-top: calc(70px + env(safe-area-inset-top, 0px))
+      }
+    }
+
+    h2.sec {
+      font: 26px var(--hd);
+      margin: 26px 0 12px
+    }
+
+    .feat {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 12px
+    }
+
+    .feat .prod {
+      margin: 0
+    }
+
+    .prod>div {
+      min-width: 0
+    }
+
+    .feat .prod {
+      width: 100%;
+      flex-direction: column
+    }
+
+    .prod {
+      display: flex;
+      gap: 12px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 10px;
+      margin-bottom: 10px;
+      text-align: left;
+      width: 100%;
+      color: var(--tx)
+    }
+
+    .thumb {
+      flex: none;
+      width: 88px;
+      height: 88px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #f6d27a, #d77a1e);
+      display: grid;
+      place-items: center;
+      font-size: 44px;
+      overflow: hidden
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .feat .thumb {
+      width: 100%;
+      height: 120px;
+      font-size: 60px
+    }
+
+    .prod h3 {
+      margin: 0;
+      font-size: 17px
+    }
+
+    .prod p {
+      margin: 2px 0 6px;
+      color: var(--mut);
+      font-size: 14px
+    }
+
+    .price {
+      font-weight: 800;
+      color: var(--red)
+    }
+
+    :root[data-theme="dark"] .price {
+      color: var(--gold)
+    }
+
+    @media(prefers-color-scheme:dark) {
+      :root:not([data-theme="light"]) .price {
+        color: var(--gold)
+      }
+    }
+
+    .bar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 30;
+      padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+      background: linear-gradient(transparent, var(--bg) 35%)
+    }
+
+    .bar button {
+      max-width: 688px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      background: var(--red);
+      color: #fff;
+      padding: 15px 18px;
+      border-radius: 14px;
+      font-weight: 800;
+      width: 100%;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, .3)
+    }
+
+    .ov {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      background: rgba(0, 0, 0, .55);
+      display: none;
+      align-items: flex-end;
+      justify-content: center
+    }
+
+    .ov.on {
+      display: flex
+    }
+
+    .sheet {
+      background: var(--bg);
+      width: 100%;
+      max-width: 720px;
+      max-height: 92vh;
+      overflow-y: auto;
+      border-radius: 20px 20px 0 0;
+      padding: 18px 16px calc(20px + env(safe-area-inset-bottom, 0px));
+      animation: up .22s ease-out
+    }
+
+    @keyframes up {
+      from {
+        transform: translateY(40px);
+        opacity: .4
+      }
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+      .sheet {
+        animation: none
+      }
+
+      html {
+        scroll-behavior: auto
+      }
+    }
+
+    .sheet h2 {
+      font: 26px var(--hd);
+      margin: 0 0 8px
+    }
+
+    .x {
+      float: right;
+      background: var(--card);
+      border: 1px solid var(--line);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-size: 18px
+    }
+
+    .big {
+      height: 150px;
+      border-radius: 12px;
+      font-size: 80px;
+      width: 100%;
+      margin-bottom: 10px
+    }
+
+    .opt {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      margin-bottom: 8px;
+      background: var(--card);
+      min-height: 48px
+    }
+
+    .opt input {
+      width: 22px;
+      height: 22px;
+      accent-color: var(--red)
+    }
+
+    .qty {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .qty button {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      font-size: 20px;
+      font-weight: 800
+    }
+
+    .qty span {
+      min-width: 26px;
+      text-align: center;
+      font-weight: 800
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line)
+    }
+
+    .row small {
+      color: var(--mut);
+      display: block
+    }
+
+    .tot {
+      padding: 10px 0
+    }
+
+    .tot div {
+      display: flex;
+      justify-content: space-between;
+      padding: 3px 0
+    }
+
+    .tot .g {
+      font-size: 20px;
+      font-weight: 800;
+      border-top: 2px solid var(--ink);
+      margin-top: 6px;
+      padding-top: 8px
+    }
+
+    .ghost {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 13px;
+      font-weight: 600;
+      width: 100%;
+      margin-top: 8px
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      font-size: 14px;
+      margin: 10px 0 4px
+    }
+
+    input[type=text],
+    input[type=tel],
+    input[type=time],
+    input[type=number],
+    select {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--card);
+      color: var(--tx);
+      font: inherit;
+      font-size: 16px
+    }
+
+    .seg {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px
+    }
+
+    .seg button {
+      padding: 14px;
+      border-radius: 12px;
+      background: var(--card);
+      border: 2px solid var(--line);
+      font-weight: 800
+    }
+
+    .seg button.on {
+      border-color: var(--red);
+      background: var(--red);
+      color: #fff
+    }
+
+    .err {
+      background: #fde3df;
+      color: #7a1010;
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin: 12px 0;
+      font-weight: 600
+    }
+
+    .warn {
+      background: #fff1c9;
+      color: #5a4000;
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin: 10px 0;
+      font-size: 14px
+    }
+
+    .empty {
+      text-align: center;
+      padding: 30px 0;
+      color: var(--mut)
+    }
+
+    footer {
+      margin-top: 30px;
+      padding: 20px 0;
+      color: var(--mut);
+      font-size: 14px;
+      text-align: center
+    }
+
+    footer button {
+      background: none;
+      text-decoration: underline;
+      color: var(--mut);
+      padding: 8px
+    }
+
+    #qr {
+      display: grid;
+      place-items: center;
+      padding: 16px;
+      background: #fff;
+      border-radius: 12px;
+      margin: 12px 0
+    }
+
+    @media(max-width:380px) {
+      .hero h1 {
+        font-size: 28px
+      }
+
+      .plate {
+        font-size: 70px
+      }
+    }
+
+    @media(max-width:700px) {
+      .feat {
+        grid-template-columns: 1fr
+      }
+
+      .feat .prod {
+        flex-direction: row
+      }
+
+      .feat .thumb {
+        width: 88px;
+        height: 88px;
+        font-size: 44px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="top">
+    <div class="wrap">
+      <div class="logo"><i>🍗</i><span id="brand"></span></div><span class="badge" id="open"></span>
+    </div>
+  </header>
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <h1 id="tag"></h1>
+        <p>Assado devagar, temperado de véspera e entregue quentinho.</p>
+      </div>
+      <div class="plate" aria-hidden="true">🍗</div><button class="cta" data-act="goMenu">Ver cardápio</button>
+    </div>
+  </section>
+  <main class="wrap">
+    <div class="info">
+      <div class="box" id="hoursBox"></div>
+      <div class="box" id="delBox"></div>
+    </div>
+  </main>
+  <nav class="chips" aria-label="Categorias">
+    <div class="wrap" id="chips"></div>
+  </nav>
+  <main class="wrap" id="menu"></main>
+  <footer>
+    <div id="addr"></div><button data-act="qr">QR Code do cardápio</button>
+  </footer>
+  <div class="bar" id="bar" hidden><button data-act="openCart"><span id="barQ"></span><span>Ver carrinho</span><span
+        id="barT"></span></button></div>
+  <div class="ov" id="ov">
+    <div class="sheet" id="sheet" role="dialog" aria-modal="true"></div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    /* =====================================================================
+       CONFIGURAÇÃO CENTRAL — edite aqui (nome, WhatsApp, horários, produtos…)
+       ===================================================================== */
+    const CONFIG = {
+      name: "Brasa & Sabor",
+      tagline: "Frango assado na brasa, do jeito da família",
+      /* >>> TROQUE PELO NÚMERO REAL: código do país + DDD + número, só dígitos (ex.: 5521999998888) <<< */
+      whatsapp: "5528999072989",
+      /* >>> ENDEREÇO PÚBLICO PERMANENTE do cardápio (usado no QR Code). Vazio = endereço desta página. <<< */
+      publicUrl: "",
+      address: "Rua das Brasas, 120 — Centro (endereço fictício)",
+      /* Horários por dia da semana, começando no domingo. null = fechado. */
+      hours: [["11:00", "15:00"], null, ["11:00", "21:00"], ["11:00", "21:00"], ["11:00", "21:00"], ["11:00", "22:00"], ["11:00", "22:00"]],
+      /* Bairros atendidos e taxa de entrega (R$). */
+      zones: [{ name: "Centro", fee: 5 }, { name: "Bairro Alto", fee: 8 }, { name: "Jardim das Flores", fee: 10 }, { name: "Zona Rural", fee: 15 }],
+      payments: ["Pix", "Dinheiro", "Cartão de débito", "Cartão de crédito"],
+      categories: [
+        { id: "frangos", name: "Frangos assados", icon: "🍗" }, { id: "combos", name: "Combos", icon: "🥘" },
+        { id: "acomp", name: "Acompanhamentos", icon: "🍚" }, { id: "porcoes", name: "Porções", icon: "🍟" },
+        { id: "bebidas", name: "Bebidas", icon: "🥤" }, { id: "ofertas", name: "Ofertas especiais", icon: "🔥" }
+      ],
+      /* Adicionais reutilizáveis; o produto aponta para um conjunto em "addons". */
+      addonSets: {
+        frango: [{ id: "fa", name: "Farofa extra", price: 6 }, { id: "mo", name: "Molho de alho", price: 3 }, { id: "vi", name: "Vinagrete", price: 4 }],
+        porcao: [{ id: "mo", name: "Molho de alho", price: 3 }, { id: "li", name: "Limão e sal", price: 0 }]
+      },
+      /* "img": URL ou imagem embutida (data:). Sem img, aparece o emoji. "active:false" esconde o produto. */
+      products: [
+        { id: "f1", cat: "frangos", name: "Frango inteiro assado", desc: "Dourado, suculento, temperado com ervas e alho.", price: 62.9, emoji: "🍗", featured: true, addons: "frango", active: true },
+        { id: "f2", cat: "frangos", name: "Meio frango assado", desc: "Metade do frango, ideal para duas pessoas.", price: 36.9, emoji: "🍗", addons: "frango", active: true },
+        { id: "f3", cat: "frangos", name: "Coxa e sobrecoxa (4 un.)", desc: "Quatro pedaços com a pele crocante.", price: 29.9, emoji: "🍖", addons: "frango", active: true },
+        { id: "c1", cat: "combos", name: "Combo Família", desc: "Frango inteiro, arroz, farofa e batata frita.", price: 89.9, emoji: "🥘", featured: true, addons: "frango", active: true },
+        { id: "c2", cat: "combos", name: "Combo Casal", desc: "Meio frango, arroz e batata frita.", price: 54.9, emoji: "🍽️", addons: "frango", active: true },
+        { id: "c3", cat: "combos", name: "Combo Individual", desc: "Coxa e sobrecoxa, arroz e farofa.", price: 28.9, emoji: "🍱", addons: "frango", active: true },
+        { id: "a1", cat: "acomp", name: "Arroz branco", desc: "Soltinho, porção para 2 pessoas.", price: 12, emoji: "🍚", active: true },
+        { id: "a2", cat: "acomp", name: "Farofa da casa", desc: "Com bacon e cebola dourada.", price: 12, emoji: "🥣", active: true },
+        { id: "a3", cat: "acomp", name: "Batata frita", desc: "Crocante por fora, macia por dentro.", price: 18, emoji: "🍟", addons: "porcao", active: true },
+        { id: "a4", cat: "acomp", name: "Maionese caseira", desc: "Receita da casa, com batata e cenoura.", price: 14, emoji: "🥗", active: true },
+        { id: "p1", cat: "porcoes", name: "Isca de frango", desc: "Tiras empanadas, 400 g.", price: 32, emoji: "🍤", addons: "porcao", active: true },
+        { id: "p2", cat: "porcoes", name: "Asinhas assadas", desc: "10 unidades com tempero defumado.", price: 29, emoji: "🍗", addons: "porcao", active: true },
+        { id: "b1", cat: "bebidas", name: "Refrigerante 2 L", desc: "Cola ou guaraná, gelado.", price: 14, emoji: "🥤", active: true },
+        { id: "b2", cat: "bebidas", name: "Suco natural 1 L", desc: "Laranja ou limão, sem conservantes.", price: 16, emoji: "🍊", active: true },
+        { id: "b3", cat: "bebidas", name: "Água mineral 500 ml", desc: "Sem gás.", price: 4, emoji: "💧", active: true },
+        { id: "o1", cat: "ofertas", name: "Frango + refri 2 L", desc: "Frango inteiro com refrigerante de 2 litros.", price: 69.9, emoji: "🔥", featured: true, addons: "frango", active: true },
+        { id: "o2", cat: "ofertas", name: "Dobradinha: 2 frangos", desc: "Dois frangos inteiros para a mesa cheia.", price: 112, emoji: "🍗", addons: "frango", active: true }
+      ]
+    };
+    document.documentElement.style.setProperty("--red", "#8a1422"); /* cores da marca: ajuste também no CSS (:root) */
+
+    /* ------------------------------ utilidades ------------------------------ */
+    const $ = s => document.querySelector(s);
+    const R = v => "R$ " + v.toFixed(2).replace(".", ",");
+    const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const P = id => CONFIG.products.find(p => p.id === id);
+    const AD = (p, id) => (CONFIG.addonSets[p.addons] || []).find(a => a.id === id);
+    const thumb = p => `<div class="thumb">${p.img ? `<img src="${esc(p.img)}" alt="${esc(p.name)}" loading="lazy">` : p.emoji}</div>`;
+
+    let cart = [], mode = "entrega", pay = "", m = null, view = "cart";
+    let form = { name: "", phone: "", cep: "", street: "", number: "", zone: "", comp: "", ref: "", time: "", needChange: false, changeFor: "" };
+    try { cart = JSON.parse(localStorage.getItem("bs_cart") || "[]").filter(i => P(i.pid) && P(i.pid).active && i.qty > 0); } catch (e) { }
+    const save = () => { try { localStorage.setItem("bs_cart", JSON.stringify(cart)); } catch (e) { } };
+
+    const unit = i => { const p = P(i.pid); return p.price + i.addons.reduce((s, a) => s + (AD(p, a) ? AD(p, a).price : 0), 0); };
+    const sub = () => cart.reduce((s, i) => s + unit(i) * i.qty, 0);
+    const fee = () => mode === "entrega" && form.zone !== "" ? CONFIG.zones[+form.zone].fee : 0;
+    const total = () => sub() + fee();
+    const count = () => cart.reduce((s, i) => s + i.qty, 0);
+
+    /* ------------------------------ horários ------------------------------ */
+    const DIAS = ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"];
+    function openNow() {
+      const d = new Date(), h = CONFIG.hours[d.getDay()]; if (!h) return false;
+      const n = d.getHours() * 60 + d.getMinutes(), t = x => +x.split(":")[0] * 60 + +x.split(":")[1];
+      return n >= t(h[0]) && n < t(h[1]);
+    }
+
+    /* ------------------------------ página ------------------------------ */
+    function renderPage() {
+      $("#brand").textContent = CONFIG.name; $("#tag").textContent = CONFIG.tagline; $("#addr").textContent = CONFIG.address;
+      document.title = CONFIG.name + " — Cardápio";
+      const o = openNow(), b = $("#open"); b.textContent = o ? "Aberto agora" : "Fechado agora"; b.className = "badge" + (o ? "" : " off");
+      const h = CONFIG.hours[new Date().getDay()];
+      $("#hoursBox").innerHTML = `<b>Hoje (${DIAS[new Date().getDay()]})</b>${h ? h[0] + " às " + h[1] : "Fechado"}`;
+      const fees = CONFIG.zones.map(z => z.fee);
+      $("#delBox").innerHTML = `<b>Entrega ou retirada</b>Entrega a partir de ${R(Math.min(...fees))}. Retire no balcão sem taxa.`;
+      $("#chips").innerHTML = CONFIG.categories.map(c => `<button class="chip" data-act="cat" data-v="${c.id}">${c.icon} ${esc(c.name)}</button>`).join("");
+      const card = p => `<button class="prod" data-act="prod" data-v="${p.id}">${thumb(p)}<div><h3>${esc(p.name)}</h3><p>${esc(p.desc)}</p><span class="price">${R(p.price)}</span></div></button>`;
+      const act = CONFIG.products.filter(p => p.active);
+      let html = `<h2 class="sec">Destaques</h2><div class="feat">${act.filter(p => p.featured).map(card).join("")}</div>`;
+      CONFIG.categories.forEach(c => {
+        const l = act.filter(p => p.cat === c.id); if (!l.length) return;
+        html += `<h2 class="sec" id="cat-${c.id}">${c.icon} ${esc(c.name)}</h2>` + l.map(card).join("");
+      });
+      $("#menu").innerHTML = html; bar();
+    }
+    function bar() { const q = count(); $("#bar").hidden = !q; $("#barQ").textContent = q + (q === 1 ? " item" : " itens"); $("#barT").textContent = R(sub()); }
+
+    /* ------------------------------ sheets ------------------------------ */
+    function show(html) { $("#sheet").innerHTML = html; $("#ov").classList.add("on"); }
+    function hide() { $("#ov").classList.remove("on"); m = null; }
+
+    function prodSheet() {
+      const p = P(m.pid), set = CONFIG.addonSets[p.addons] || [];
+      const price = p.price + [...m.addons].reduce((s, a) => s + AD(p, a).price, 0);
+      show(`<button class="x" data-act="close" aria-label="Fechar">✕</button><div class="thumb big">${p.img ? `<img src="${esc(p.img)}" alt="">` : p.emoji}</div>
+  <h2>${esc(p.name)}</h2><p>${esc(p.desc)}</p>
+  ${set.length ? "<b>Adicionais</b><div style='margin-top:8px'>" + set.map(a => `<label class="opt"><span>${esc(a.name)} <small>${a.price ? "+ " + R(a.price) : "grátis"}</small></span><input type="checkbox" data-act="addon" data-v="${a.id}" ${m.addons.has(a.id) ? "checked" : ""}></label>`).join("") + "</div>" : ""}
+  <div class="row" style="border:0"><span class="qty"><button data-act="mq" data-v="-1" aria-label="Menos">−</button><span>${m.qty}</span><button data-act="mq" data-v="1" aria-label="Mais">+</button></span><b>${R(price * m.qty)}</b></div>
+  <button class="cta" data-act="add">Adicionar ao carrinho</button>`);
+    }
+
+    function cartSheet() {
+      view = "cart";
+      if (!cart.length) return show(`<button class="x" data-act="close" aria-label="Fechar">✕</button><h2>Seu carrinho</h2><div class="empty">Seu carrinho está vazio.<br>Escolha um prato para começar.</div><button class="cta" data-act="close">Ver cardápio</button>`);
+      show(`<button class="x" data-act="close" aria-label="Fechar">✕</button><h2>Seu carrinho</h2>` + cart.map((i, k) => {
+        const p = P(i.pid), ad = i.addons.map(a => AD(p, a).name).join(", ");
+        return `<div class="row"><div><b>${esc(p.name)}</b><small>${ad ? "+ " + esc(ad) + " · " : ""}${R(unit(i))} cada</small></div>
+    <div style="text-align:right"><span class="qty"><button data-act="cq" data-k="${k}" data-v="-1" aria-label="Menos">−</button><span>${i.qty}</span><button data-act="cq" data-k="${k}" data-v="1" aria-label="Mais">+</button></span><div class="price">${R(unit(i) * i.qty)}</div></div></div>`;
+      }).join("") + `<div class="tot"><div><span>Subtotal</span><b>${R(sub())}</b></div><div><span>Taxa de entrega</span><span>definida no próximo passo</span></div></div>
+  <button class="cta" data-act="checkout">Prosseguir para finalização</button><button class="ghost" data-act="close">Continuar comprando</button>`);
+    }
+
+    const summary = () => `<div class="tot"><div><span>Subtotal</span><span>${R(sub())}</span></div>${mode === "entrega" ? `<div><span>Taxa de entrega</span><span>${form.zone === "" ? "escolha o bairro" : R(fee())}</span></div>` : ""}<div class="g"><span>Total</span><span>${R(total())}</span></div></div>`;
+
+    function checkoutSheet() {
+      view = "checkout";
+      const f = form, v = k => esc(f[k]);
+      show(`<button class="x" data-act="close" aria-label="Fechar">✕</button><h2>Finalizar pedido</h2>
+  <div class="seg"><button data-act="mode" data-v="entrega" class="${mode === "entrega" ? "on" : ""}">🛵 Entrega</button><button data-act="mode" data-v="retirada" class="${mode === "retirada" ? "on" : ""}">🏪 Retirada</button></div>
+  <label for="f_name">Nome</label><input type="text" id="f_name" value="${v("name")}" autocomplete="name">
+  <label for="f_phone">Telefone com DDD</label><input type="tel" id="f_phone" value="${v("phone")}" autocomplete="tel" inputmode="tel" placeholder="(21) 99999-8888">
+  ${mode === "entrega" ? `
+  <label for="f_cep">CEP (opcional)</label><input type="text" id="f_cep" value="${v("cep")}" inputmode="numeric" placeholder="00000-000">
+  <label for="f_street">Rua</label><input type="text" id="f_street" value="${v("street")}" autocomplete="address-line1">
+  <label for="f_number">Número</label><input type="text" id="f_number" value="${v("number")}">
+  <label for="f_zone">Bairro</label><select id="f_zone"><option value="">Selecione o bairro</option>${CONFIG.zones.map((z, i) => `<option value="${i}" ${String(f.zone) === String(i) ? "selected" : ""}>${esc(z.name)} — taxa ${R(z.fee)}</option>`).join("")}</select>
+  <label for="f_comp">Complemento (opcional)</label><input type="text" id="f_comp" value="${v("comp")}">
+  <label for="f_ref">Ponto de referência (opcional)</label><input type="text" id="f_ref" value="${v("ref")}">`
+          : `<label for="f_time">Horário desejado para retirada</label><input type="time" id="f_time" value="${v("time")}"><div class="warn">Retire em: ${esc(CONFIG.address)}</div>`}
+  <label>Forma de pagamento</label>
+  ${CONFIG.payments.map(x => `<label class="opt"><span>${esc(x)}</span><input type="radio" name="pay" data-act="pay" data-v="${esc(x)}" ${pay === x ? "checked" : ""}></label>`).join("")}
+  ${pay === "Dinheiro" ? `<label class="opt"><span>Preciso de troco</span><input type="checkbox" id="f_needChange" ${f.needChange ? "checked" : ""}></label>${f.needChange ? `<label for="f_changeFor">Troco para quanto? (R$)</label><input type="text" id="f_changeFor" inputmode="decimal" value="${v("changeFor")}" placeholder="100">` : ""}` : ""}
+  <div id="sum">${summary()}</div><div id="err"></div>
+  <button class="cta" data-act="send">Finalizar pedido pelo WhatsApp</button><button class="ghost" data-act="openCart">Voltar ao carrinho</button>`);
+    }
+
+    /* ------------------------------ mensagem WhatsApp ------------------------------ */
+    function buildMessage() {
+      const L = [`*Novo pedido — ${CONFIG.name}*`, "", `Cliente: ${form.name.trim()}`, `Telefone: ${form.phone.trim()}`, `Modalidade: ${mode === "entrega" ? "Entrega" : "Retirada no estabelecimento"}`];
+      if (mode === "entrega") {
+        L.push(`Endereço: ${form.street.trim()}, ${form.number.trim()} — ${CONFIG.zones[+form.zone].name}` + (form.cep.trim() ? ` (CEP ${form.cep.trim()})` : ""));
+        if (form.comp.trim()) L.push(`Complemento: ${form.comp.trim()}`);
+        if (form.ref.trim()) L.push(`Referência: ${form.ref.trim()}`);
+      } else L.push(`Horário de retirada: ${form.time}`);
+      L.push("", "*Itens*");
+      cart.forEach(i => {
+        const p = P(i.pid);
+        L.push(`${i.qty}x ${p.name} — ${R(p.price)} cada = ${R(p.price * i.qty)}`);
+        i.addons.forEach(a => { const ad = AD(p, a); L.push(`   + ${ad.name} (${R(ad.price)} cada) = ${R(ad.price * i.qty)}`); });
+      });
+      L.push("", `Subtotal: ${R(sub())}`);
+      if (mode === "entrega") L.push(`Taxa de entrega: ${R(fee())}`);
+      L.push(`*Total: ${R(total())}*`, "", `Pagamento: ${pay}`);
+      if (pay === "Dinheiro") L.push(form.needChange ? `Troco para: ${R(parseMoney(form.changeFor))} (troco de ${R(parseMoney(form.changeFor) - total())})` : "Sem necessidade de troco");
+      return L.join("\n");
+    }
+    const parseMoney = s => parseFloat(String(s).replace(/\./g, "").replace(",", ".")) || 0;
+
+    function send() {
+      const e = [], f = form, ph = f.phone.replace(/\D/g, "");
+      if (!cart.length) e.push("Seu carrinho está vazio.");
+      if (f.name.trim().length < 2) e.push("Informe seu nome.");
+      if (ph.length < 10 || ph.length > 11) e.push("Informe o telefone com DDD (10 ou 11 números).");
+      if (mode === "entrega") {
+        if (!f.street.trim()) e.push("Informe a rua.");
+        if (!f.number.trim()) e.push("Informe o número.");
+        if (f.zone === "") e.push("Escolha o bairro para calcular a taxa.");
+      } else if (!f.time) e.push("Informe o horário de retirada.");
+      if (!pay) e.push("Escolha a forma de pagamento.");
+      if (pay === "Dinheiro" && f.needChange && parseMoney(f.changeFor) < total()) e.push("O valor do troco deve ser igual ou maior que o total (" + R(total()) + ").");
+      if (e.length) { $("#err").innerHTML = `<div class="err" role="alert">${e.map(esc).join("<br>")}</div>`; $("#err").scrollIntoView({ block: "center" }); return; }
+      const url = "https://wa.me/" + CONFIG.whatsapp.replace(/\D/g, "") + "?text=" + encodeURIComponent(buildMessage());
+      const a = document.createElement("a"); a.href = url; a.target = "_blank"; a.rel = "noopener"; document.body.appendChild(a); a.click(); a.remove();
+    }
+
+    /* ------------------------------ QR Code ------------------------------ */
+    function qrSheet() {
+      const url = CONFIG.publicUrl || location.href.split("#")[0];
+      show(`<button class="x" data-act="close" aria-label="Fechar">✕</button><h2>QR Code do cardápio</h2><div id="qr"></div><p style="word-break:break-all"><b>Endereço:</b> ${esc(url)}</p>
+  ${CONFIG.publicUrl ? "" : `<div class="warn">Este QR aponta para o endereço atual desta página. Antes de imprimir, defina <b>publicUrl</b> na configuração com o endereço permanente do cardápio.</div>`}`);
+      if (typeof QRCode === "undefined") { $("#qr").textContent = "Não foi possível carregar o gerador de QR Code."; return; }
+      new QRCode($("#qr"), { text: url, width: 240, height: 240, correctLevel: QRCode.CorrectLevel.H });
+    }
+
+    /* ------------------------------ eventos ------------------------------ */
+    document.addEventListener("click", ev => {
+      if (ev.target.id === "ov") return hide();
+      const el = ev.target.closest("[data-act]"); if (!el) return;
+      const a = el.dataset.act, v = el.dataset.v;
+      if (a === "goMenu") $("#menu").scrollIntoView();
+      else if (a === "cat") document.getElementById("cat-" + v)?.scrollIntoView();
+      else if (a === "prod") { m = { pid: v, qty: 1, addons: new Set() }; prodSheet(); }
+      else if (a === "addon") { el.checked ? m.addons.add(v) : m.addons.delete(v); prodSheet(); }
+      else if (a === "mq") { m.qty = Math.max(1, Math.min(20, m.qty + +v)); prodSheet(); }
+      else if (a === "add") {
+        const ad = [...m.addons].sort(), key = m.pid + "|" + ad.join(","), ex = cart.find(i => i.key === key);
+        ex ? ex.qty += m.qty : cart.push({ key, pid: m.pid, qty: m.qty, addons: ad });
+        save(); bar(); hide();
+      }
+      else if (a === "openCart") cartSheet();
+      else if (a === "cq") { const i = cart[+el.dataset.k]; i.qty += +v; if (i.qty <= 0) cart.splice(+el.dataset.k, 1); save(); bar(); cartSheet(); }
+      else if (a === "checkout") checkoutSheet();
+      else if (a === "mode") { mode = v; checkoutSheet(); }
+      else if (a === "pay") { pay = v; checkoutSheet(); }
+      else if (a === "send") send();
+      else if (a === "qr") qrSheet();
+      else if (a === "close") hide();
+    });
+    document.addEventListener("input", ev => {
+      const id = ev.target.id; if (id && id.startsWith("f_") && ev.target.type !== "checkbox" && id !== "f_zone") form[id.slice(2)] = ev.target.value;
+    });
+    document.addEventListener("change", ev => {
+      const id = ev.target.id;
+      if (id === "f_zone") { form.zone = ev.target.value; $("#sum").innerHTML = summary(); }
+      if (id === "f_needChange") { form.needChange = ev.target.checked; checkoutSheet(); }
+    });
+    document.addEventListener("keydown", ev => { if (ev.key === "Escape") hide(); });
+
+    /* destaca a categoria visível e mantém o chip ativo à vista na faixa */
+    let cur = "", tk = false;
+    function spy() {
+      let id = "";
+      CONFIG.categories.forEach(c => { const e = document.getElementById("cat-" + c.id); if (e && e.getBoundingClientRect().top <= 150) id = c.id; });
+      if (id === cur) return; cur = id;
+      const w = $("#chips .wrap");
+      document.querySelectorAll(".chip").forEach(c => {
+        const on = c.dataset.v === id; c.classList.toggle("on", on);
+        if (on) { const x = c.getBoundingClientRect().left - w.getBoundingClientRect().left + w.scrollLeft; w.scrollTo({ left: x - (w.clientWidth - c.offsetWidth) / 2, behavior: "smooth" }); }
+      });
+    }
+    addEventListener("scroll", () => { if (!tk) { tk = true; requestAnimationFrame(() => { tk = false; spy(); }); } }, { passive: true });
+
+    renderPage();
+  </script>
+</body>
+
+</html>
